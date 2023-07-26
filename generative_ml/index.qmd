@@ -1,0 +1,13 @@
+---
+title: Generative ML
+---
+
+## What is a generative model?
+
+At its core any model that can generate examples from a data distribution. 
+
+Typically we think of image generation and LLMs, but this description covers a huge range of models. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the "data generating process" of a given observable. Doing this well is something discussed often when people try and come up with [principled ways](https://betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html) to build models.
+
+Instead I'll focus on deep learning and the kinds of models that have helped hype up generative AI. Just remember that with a generative model we want to be able to generate data that looks similar to our training data. That can be unconditional (just generating random faces) or conditioned on other data (think LLMs).
+
+![Model building](images/img_1.jpg)
