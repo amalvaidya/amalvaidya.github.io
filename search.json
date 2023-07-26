@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "generative_ml/vae_1.html",
+    "href": "generative_ml/vae_1.html",
+    "title": "1. Variational Autoencoders",
+    "section": "",
+    "text": "Another title\nThis is a new page about something"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "A Machine Learning blog",
+    "section": "",
+    "text": "A blog dedicated to all things ML. My goal is to try and write things that I’d want to read myself and cover a spread of things that I want to learn about or am interested in."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Fill this in when you have time"
+  },
+  {
+    "objectID": "generative_ml/index.html",
+    "href": "generative_ml/index.html",
+    "title": "Generative ML",
+    "section": "",
+    "text": "At its core any model that can generate examples from a data distribution.\nTypically we think of image generation and LLMs, but this description covers a huge range of models. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the “data generating process” of a given observable. Doing this well is something discussed often when people try and come up with principled ways to build models.\nInstead I’ll focus on deep learning and the kinds of models that have helped hype up generative AI. Just remember that with a generative model we want to be able to generate data that looks similar to our training data. That can be unconditional (just generating random faces) or conditioned on other data (think LLMs).\n\n\n\nModel building"
+  },
+  {
+    "objectID": "generative_ml/index.html#what-is-a-generative-model",
+    "href": "generative_ml/index.html#what-is-a-generative-model",
+    "title": "Generative ML",
+    "section": "",
+    "text": "At its core any model that can generate examples from a data distribution.\nTypically we think of image generation and LLMs, but this description covers a huge range of models. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the “data generating process” of a given observable. Doing this well is something discussed often when people try and come up with principled ways to build models.\nInstead I’ll focus on deep learning and the kinds of models that have helped hype up generative AI. Just remember that with a generative model we want to be able to generate data that looks similar to our training data. That can be unconditional (just generating random faces) or conditioned on other data (think LLMs).\n\n\n\nModel building"
+  }
+]
