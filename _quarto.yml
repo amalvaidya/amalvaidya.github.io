@@ -10,12 +10,12 @@ website:
     left:
       - text: "Home"
         file: index.qmd
-      - text: "Generative ML"
+      - text: "Generative AI"
         file: generative_ml/index.qmd
 
   sidebar:
     - title: "Home"
-      stlye: "docked"
+      stlye: "floating"
       contents:
         - index.qmd
         - about.qmd
@@ -38,7 +38,8 @@ format:
       light: flatly
       dark: darkly
     toc: true
-    page-layout: full
-
+    toc-depth: 2
+    page-layout: article
+    
 
 

@@ -1,5 +1,5 @@
 ---
-title: Generative ML
+title: Generative AI
 ---
 
 # What is a generative model?
@@ -8,17 +8,17 @@ Typically we think of image generation and LLMs, but this description covers a h
 
 Instead I'll focus on deep learning and the kinds of models that have helped hype up generative AI. Just remember that with a generative model we want to be able to generate data that looks similar to our training data. That can be unconditional (just generating random faces) or conditioned on other data (think LLMs).
 
-## Sampling from distributions
+### Sampling from distributions
 
 At the simplest level any model that can generate samples, $x$, from a data distribution $p(x)$ is a generative model. Most of the time however $p(x)$ is going to be something complicated like the distribution of all the cat photos in the world. Generative models try and sample from these distributions by first generating samples from a known distribution, $z$, and then learning how to transform them into samples from $x$.
 
 :::{.callout-note}
-This might not sound like what an LLM does when its generating text but in that case the model is drawing samples of tokens $x$ based on the learned distribution *conditioned* on the previous tokens in the sequence $p(x_i | x_{_i-1}...)$.
+Models like LLMs do something a little different. They generate text by learning to predict the probability of $x$ being the next token *conditioned* on the previous tokens in the sequence $p(x_i | x_{_i-1}...)$.
 :::
 
-It might sound mysterious but the same idea can be used to generate samples from arbitrarty statistical distributions. A method called **inverse transform sampling** works by sampling $z$ from $\text{U}(0, 1)$ and then applying a transformation $g(z)$ so that
+This might sound mysterious but the same idea can be used to generate samples from arbitrarty statistical distributions. The method, called **inverse transform sampling**, works by taking a sample, $z$, from $\text{U}(0, 1)$ and then applying a transformation $g(z)$ so that
 $$
 x = g(z).
 $$
-In this case $g(z)$ is the inverse cumalative distribution function of $p(x)$. 
+In this case $g(z)$ is the inverse cumalative distribution function of $x$. The first generative model that we'll dicuss does the same thing by replacing $x$ with photos and $g(z)$ with a neural network.
 
