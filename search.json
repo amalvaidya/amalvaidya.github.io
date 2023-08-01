@@ -1,17 +1,10 @@
 [
   {
-    "objectID": "generative_ml/vae_1.html",
-    "href": "generative_ml/vae_1.html",
-    "title": "1. Variational Autoencoders",
+    "objectID": "generative_ml/index.html",
+    "href": "generative_ml/index.html",
+    "title": "Generative AI",
     "section": "",
-    "text": "Another title\nThis is a new page about something"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "A Machine Learning blog",
-    "section": "",
-    "text": "A blog dedicated to all things ML. My goal is to try and write things that I’d want to read myself and cover a spread of things that I want to learn about or am interested in."
+    "text": "What is a generative model?\nTypically we think of image generation and LLMs, but this description covers a huge range of models. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the “data generating process” of a given observable. Doing this well is something discussed often when people try and come up with principled ways to build statistical models.\nInstead I’ll focus on deep learning and the kinds of models that have helped hype up generative AI. Just remember that with a generative model we want to be able to generate data that looks similar to our training data. That can be unconditional (just generating random faces) or conditioned on other data (think LLMs).\n\nSampling from distributions\nAt the simplest level any model that can generate samples, \\(x\\), from a data distribution \\(p(x)\\) is a generative model. Most of the time however \\(p(x)\\) is going to be something complicated like the distribution of all the cat photos in the world. Generative models try and sample from these distributions by first generating samples from a known distribution, \\(z\\), and then learning how to transform them into samples from \\(x\\).\n\n\n\n\n\n\nNote\n\n\n\nModels like LLMs do something a little different. They generate text by learning to predict the probability of \\(x\\) being the next token conditioned on the previous tokens in the sequence \\(p(x_i | x_{_i-1}...)\\).\n\n\nThis might sound mysterious but the same idea can be used to generate samples from arbitrarty statistical distributions. The method, called inverse transform sampling, works by taking a sample, \\(z\\), from \\(\\text{U}(0, 1)\\) and then applying a transformation \\(g(z)\\) so that \\[\nx = g(z).\n\\] In this case \\(g(z)\\) is the inverse cumalative distribution function of \\(x\\). The first generative model that we’ll dicuss does the same thing by replacing \\(x\\) with photos and \\(g(z)\\) with a neural network."
   },
   {
     "objectID": "about.html",
@@ -21,17 +14,31 @@
     "text": "Fill this in when you have time"
   },
   {
-    "objectID": "generative_ml/index.html",
-    "href": "generative_ml/index.html",
-    "title": "Generative ML",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "A Machine Learning blog",
     "section": "",
-    "text": "At its core any model that can generate examples from a data distribution.\nTypically we think of image generation and LLMs, but this description covers a huge range of models. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the “data generating process” of a given observable. Doing this well is something discussed often when people try and come up with principled ways to build models.\nInstead I’ll focus on deep learning and the kinds of models that have helped hype up generative AI. Just remember that with a generative model we want to be able to generate data that looks similar to our training data. That can be unconditional (just generating random faces) or conditioned on other data (think LLMs)."
+    "text": "A blog dedicated to all things ML. My goal is to try and write things that I’d want to read myself and cover a spread of things that I want to learn about or am interested in."
   },
   {
-    "objectID": "generative_ml/index.html#what-is-a-generative-model",
-    "href": "generative_ml/index.html#what-is-a-generative-model",
-    "title": "Generative ML",
+    "objectID": "generative_ml/vae_1.html",
+    "href": "generative_ml/vae_1.html",
+    "title": "1. VAEs: Variational autoencoders",
     "section": "",
-    "text": "At its core any model that can generate examples from a data distribution.\nTypically we think of image generation and LLMs, but this description covers a huge range of models. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the “data generating process” of a given observable. Doing this well is something discussed often when people try and come up with principled ways to build models.\nInstead I’ll focus on deep learning and the kinds of models that have helped hype up generative AI. Just remember that with a generative model we want to be able to generate data that looks similar to our training data. That can be unconditional (just generating random faces) or conditioned on other data (think LLMs)."
+    "text": "Autoencoders are a good place to start since they’ll demonstrate why the idea of being able to sample from a distribution is important. The way they work is also pretty intutive. Autoencoders learn low dimensional representations by passing data through a “bottle neck” and try to reconstruct it at the other end.\n\n\nYou can break down an autoencoder network into two parts, the encoder and decoder. The network is trained jointly by passing data through each part and trying to reconstruct the input. In order for this to work The output of the encoder needs to contain enough information about the input data so that the decoder network can recreate it.\nToDo: autoencoder images\nThe encoder output can be considered a low(er) dimensional vector representation of the input data. They’re often called latent or hidden vectors since they contain the latent attributes of the data. For our purposes though the most interesting part is the decoder. If you train an autoencoder on a collection of images then you should be able to generate new images by passing simple, low dimensional data into the decoder input!\n\n\n\nFor this example we’ll try and generate some faces from the famous CelebA dataset. The dataset contains\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 1: Examples from CelebA validation set\n\n\nIntuitively\n\nI remember asking a researcher at my old job exactly why VAEs made the assumption that elements in the latent space were normally distributed and the response was “that’s just the assumption of the model. At the time it did not help."
+  },
+  {
+    "objectID": "generative_ml/vae_1.html#what-is-an-autoencoder",
+    "href": "generative_ml/vae_1.html#what-is-an-autoencoder",
+    "title": "1. VAEs: Variational autoencoders",
+    "section": "",
+    "text": "You can break down an autoencoder network into two parts, the encoder and decoder. The network is trained jointly by passing data through each part and trying to reconstruct the input. In order for this to work The output of the encoder needs to contain enough information about the input data so that the decoder network can recreate it.\nToDo: autoencoder images\nThe encoder output can be considered a low(er) dimensional vector representation of the input data. They’re often called latent or hidden vectors since they contain the latent attributes of the data. For our purposes though the most interesting part is the decoder. If you train an autoencoder on a collection of images then you should be able to generate new images by passing simple, low dimensional data into the decoder input!"
+  },
+  {
+    "objectID": "generative_ml/vae_1.html#generating-iamges",
+    "href": "generative_ml/vae_1.html#generating-iamges",
+    "title": "1. VAEs: Variational autoencoders",
+    "section": "",
+    "text": "For this example we’ll try and generate some faces from the famous CelebA dataset. The dataset contains\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 1: Examples from CelebA validation set\n\n\nIntuitively\n\nI remember asking a researcher at my old job exactly why VAEs made the assumption that elements in the latent space were normally distributed and the response was “that’s just the assumption of the model. At the time it did not help."
   }
 ]

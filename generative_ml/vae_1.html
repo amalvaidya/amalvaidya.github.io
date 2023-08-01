@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Intrinsic order - 1. Variational Autoencoders</title>
+<title>Intrinsic order - 1. VAEs: Variational autoencoders</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -88,7 +88,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="../generative_ml/index.html" rel="" target="" aria-current="page">
- <span class="menu-text">Generative ML</span></a>
+ <span class="menu-text">Generative AI</span></a>
   </li>  
 </ul>
             <div class="quarto-navbar-tools ms-auto">
@@ -102,14 +102,14 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../generative_ml/vae_1.html">1. Variational Autoencoders</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../generative_ml/vae_1.html">1. VAEs: Variational autoencoders</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -117,13 +117,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../generative_ml/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Generative ML</span></a>
+ <span class="menu-text">Generative AI</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../generative_ml/vae_1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">1. Variational Autoencoders</span></a>
+ <span class="menu-text">1. VAEs: Variational autoencoders</span></a>
   </div>
 </li>
     </ul>
@@ -135,17 +135,21 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
-  <ul>
-  <li><a href="#another-title" id="toc-another-title" class="nav-link active" data-scroll-target="#another-title">Another title</a></li>
+  <ul class="collapse">
+  <li><a href="#starting-simple-autoencoders" id="toc-starting-simple-autoencoders" class="nav-link active" data-scroll-target="#starting-simple-autoencoders">Starting simple: Autoencoders</a>
+  <ul class="collapse">
+  <li><a href="#what-is-an-autoencoder" id="toc-what-is-an-autoencoder" class="nav-link" data-scroll-target="#what-is-an-autoencoder">What is an autoencoder?</a></li>
+  <li><a href="#generating-iamges" id="toc-generating-iamges" class="nav-link" data-scroll-target="#generating-iamges">Generating iamges</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content column-body" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">1. Variational Autoencoders</h1>
+<h1 class="title">1. VAEs: Variational autoencoders</h1>
 </div>
 
 
@@ -160,11 +164,55 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="another-title" class="level1">
-<h1>Another title</h1>
-<p>This is a new page about something</p>
+<section id="starting-simple-autoencoders" class="level1">
+<h1>Starting simple: Autoencoders</h1>
+<p>Autoencoders are a good place to start since they’ll demonstrate why the idea of being able to sample from a distribution is important. The way they work is also pretty intutive. Autoencoders learn low dimensional representations by passing data through a “bottle neck” and try to reconstruct it at the other end.</p>
+<section id="what-is-an-autoencoder" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-an-autoencoder">What is an autoencoder?</h2>
+<p>You can break down an autoencoder network into two parts, the encoder and decoder. The network is trained jointly by passing data through each part and trying to reconstruct the input. In order for this to work The output of the encoder needs to contain enough information about the input data so that the decoder network can recreate it.</p>
+<p><strong>ToDo: autoencoder images</strong></p>
+<p>The encoder output can be considered a low(er) dimensional vector representation of the input data. They’re often called latent or hidden vectors since they contain the latent attributes of the data. For our purposes though the most interesting part is the decoder. If you train an autoencoder on a collection of images then you should be able to generate new images by passing simple, low dimensional data into the decoder input!</p>
+</section>
+<section id="generating-iamges" class="level2">
+<h2 class="anchored" data-anchor-id="generating-iamges">Generating iamges</h2>
+<p>For this example we’ll try and generate some faces from the famous <a href="https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html">CelebA</a> dataset. The dataset contains</p>
+<div id="fig-celeba" class="quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/celebA_val_set_23.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/celebA_val_set_123.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/celebA_val_set_453.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/celebA_val_set_623.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/celebA_val_set_645.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/celebA_val_set_2645.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Examples from CelebA validation set</figcaption><p></p>
+</figure>
+</div>
+<p>Intuitively</p>
+<blockquote class="blockquote">
+<p>I remember asking a researcher at my old job exactly why VAEs made the assumption that elements in the latent space were normally distributed and the response was “that’s just the assumption of the model. At the time it did not help.</p>
+</blockquote>
+<section id="references" class="level4">
+<h4 class="anchored" data-anchor-id="references">References</h4>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
