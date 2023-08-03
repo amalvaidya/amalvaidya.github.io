@@ -4,21 +4,23 @@ title: Generative AI
 
 # What is a generative model?
 
-Typically we think of image generation and LLMs, but this description covers a huge range of models. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the "data generating process" of a given observable. Doing this well is something discussed often when people try and come up with [principled ways](https://betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html) to build statistical models.
+In the most general terms any model that can generate samples from a data distribution is a generative model. Typically we think of image generation and LLMs, but this description covers a huge range of things. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the *data generating process* of a given observable. There are plenty of [good resources]((https://betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html)) on principled ways to build these kinds of statistical models. 
 
-Instead I'll focus on deep learning and the kinds of models that have helped hype up generative AI. Just remember that with a generative model we want to be able to generate data that looks similar to our training data. That can be unconditional (just generating random faces) or conditioned on other data (think LLMs).
+Instead I'll focus on deep learning and the kinds of models that have driven the spike in google searches for "generative AI". Just remember that with a generative model we want to be able to generate data that looks similar to our training data. I will provide all the code and models that I use as well, so you can play around with the concepts discussed. 
 
 ### Sampling from distributions
 
-At the simplest level any model that can generate samples, $x$, from a data distribution $p(x)$ is a generative model. Most of the time however $p(x)$ is going to be something complicated like the distribution of all the cat photos in the world. Generative models try and sample from these distributions by first generating samples from a known distribution, $z$, and then learning how to transform them into samples from $x$.
+Returning to the original definition, any model that can generate samples, $x$, from a data distribution $p(x)$ is a generative model. Most of the time however $p(x)$ is going to be something complicated like the distribution of all the cat photos in the world. Generative models try and sample from these distributions by first generating samples from a known distribution, $z$, and then learning how to transform them into samples from $x$.
 
 :::{.callout-note}
-Models like LLMs do something a little different. They generate text by learning to predict the probability of $x$ being the next token *conditioned* on the previous tokens in the sequence $p(x_i | x_{_i-1}...)$.
+Language models do something a little different. Text is represented as seqeunce of text segments called tokens. They generate text by learning to predict the probability of $x$ being the next token *conditioned* on the previous tokens in the sequence $p(x_i | x_{_i-1}...)$. 
+
 :::
 
 This might sound mysterious but the same idea can be used to generate samples from arbitrarty statistical distributions. The method, called **inverse transform sampling**, works by taking a sample, $z$, from $\text{U}(0, 1)$ and then applying a transformation $g(z)$ so that
 $$
 x = g(z).
 $$
-In this case $g(z)$ is the inverse cumalative distribution function of $x$. The first generative model that we'll dicuss does the same thing by replacing $x$ with photos and $g(z)$ with a neural network.
+In this case $g(z)$ is the inverse cumalative distribution function of $x$. The first generative model that we'll dicuss does the same thing by replacing $x$ with images and $g(z)$ with a neural network.
+
 
