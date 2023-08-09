@@ -40,9 +40,9 @@ It works by passing data through the encoder, which takes the input and squeezes
 The encoder output can be considered a low(er) dimensional vector representation of the input data. They're often called latent or hidden vectors since they're supposed to contain the latent attributes of the data. For our purposes though the most interesting part is the decoder. If you train an autoencoder on a collection of images then you should be able to generate new images by passing simple, low dimensional data into the decoder input!
 
 
-### Building and training the autoencoder
+### Model structure and training
 
-We need to start by defining the structure of both the encoder and decoder. Since we're considering images they'll consist of a series of convolutional (and transpose convolutional) layers respectively. In building the model for this example I took plenty of inspiration from **Ref to deep learning book and the repo**, the precise structure can be found **link to gitlab**. There are other excellent resources describing how convolutional layers work, including the **link to pytorch docs**. 
+We can build the encoder and decoder layers using a series of convolutional (and transpose convolutional) layers. This is a common strategy for image based ML problems and, since there are other excellent resources describing how convolutional layers work, including the **link to pytorch docs**, I won't discuss them here. All the code written for this example can be found **here**. In building the model for this example I took plenty of inspiration from **Ref to deep learning book and the repo**.
 
 The nice thing is that we can abstract away most of the complexity when it comes to training. The model, with an input sample $x$ can be represented simply as
 $$
@@ -56,18 +56,42 @@ Finally, training the autoencoder means simply picking a loss function $L$ and m
 $$
 L(x, g(f(x))).
 $$
-Now all we need to do is select a loss function. In this case $x$ represents an image which is encoded in three colour channels (RGB) of dimension $218 \times 178$. This is a tensor of shape $(3, 217, 178)$ where each entry represents a float colour intensity which is scaled between 0 and 1. Using the mean squared error (MSE) between our reconstructed and original pixel values is a reasonable choice, forcing the model to try and get the correct pixel values.
+All we need to do now is select a loss function. In this case $x$ is a tensor of RGB pixel intensities for each image. The values are scaled to be between 0 and 1. Using the mean squared error (MSE) between our reconstructed and original pixel values is a reasonable choice, forcing the model to try and get the correct pixel values.
 
 :::{.callout-note}
-Using MSE loss with image reconstruction can often lead to blurry images as fine details can be lost when reconstructed values are close but not exact.
+Using MSE loss in image reconstruction tasks can make the model less sensitive to small amounts of gaussian blur around the target pixel values, which makes images look blurry. 
 :::
 
-### Training results
+Keeping things simple and training the model using the Adam optimiser for 10 epochs achieves reasonable results. Practically no time was spent fine tuning this model but it does pretty well. Training took about 30 minutes on a single GPU. Instead of plotting training loss curves it's more insightful to just plot the input and output images directly.
+
+[comment]: # ( ![Autoencoder structure](images/autoencoder_training_loss.png) )
+#### Comparing inputs and outputs
+
+::: {#fig-aegen_in layout-ncol=3}
+![](images/celebA_test_set_7961.png){}
+
+![](images/celebA_test_set_8842.png){}
+
+![](images/celebA_test_set_8970.png){}
+
+Original images
+:::
+
+::: {#fig-aegen_out layout-ncol=3}
+![](images/ae_gen_test_set_7961.png){}
+
+![](images/ae_gen_test_set_8842.png){}
+
+![](images/ae_gen_test_set_8970.png){}
+
+Autoencoder output
+:::
 
 
-## Exploring the latent space
 
-## Generating images!
+### Exploring the latent space
+
+### Generating images!
 
 
 # VAEs to the rescue
