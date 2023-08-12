@@ -40,7 +40,7 @@ It works by passing data through the encoder, which takes the input and squeezes
 The encoder output can be considered a low(er) dimensional vector representation of the input data. They're often called latent or hidden vectors since they're supposed to contain the latent attributes of the data. For our purposes though the most interesting part is the decoder. If you train an autoencoder on a collection of images then you should be able to generate new images by passing simple, low dimensional data into the decoder input!
 
 
-### Model structure and training
+## Model structure and training
 
 We can build the encoder and decoder layers using a series of convolutional (and transpose convolutional) layers. This is a common strategy for image based ML problems and, since there are other excellent resources describing how convolutional layers work, including the **link to pytorch docs**, I won't discuss them here. All the code written for this example can be found **here**. In building the model for this example I took plenty of inspiration from **Ref to deep learning book and the repo**.
 
@@ -65,7 +65,9 @@ Using MSE loss in image reconstruction tasks can make the model less sensitive t
 Keeping things simple and training the model using the Adam optimiser for 10 epochs achieves reasonable results. Practically no time was spent fine tuning this model but it does pretty well. Training took about 30 minutes on a single GPU. Instead of plotting training loss curves it's more insightful to just plot the input and output images directly.
 
 [comment]: # ( ![Autoencoder structure](images/autoencoder_training_loss.png) )
-#### Comparing inputs and outputs
+### Comparing inputs and outputs
+
+A side by side comparison of input and output images of the autoencoder should give some sense of how well it's performing.
 
 ::: {#fig-aegen_in layout-ncol=3}
 ![](images/celebA_test_set_7961.png){}
@@ -87,11 +89,21 @@ Original images
 Autoencoder output
 :::
 
+A side by side comparison shows that while a lot of detail is lost the reconstructed image does resemble the original. At the very least it does look like a human face! What's interesting is that it's not just blurry, some details are lot entirely. Things like jewellery and ties are lost completely. This likely because that information doesn't make it though the bottleneck since its less important than other facial characteristics. More importantly, it should now be possible to create new images. 
 
+## Generating images
+
+Generating images should be as easy as generating new latent vectors and throwing them into the decoder. In this case these are 200 dimensional vectors. How do we go about generating new latent vectors that correspond to new faces. VAEs have an answer to this question but for now we can just try and sample some random vectors what look somewhat like the latent vectors from our validation set. 
+To do this first encode the validation set and look at the 200 distributions corresponding to each dimension of the latent vectors. 
+
+:::{.callout-tip}
+## The decoder
+If there is interest I can make the pre-trained decoder available so that you can try an generate images with it yourself. 
+:::
 
 ### Exploring the latent space
 
-### Generating images!
+
 
 
 # VAEs to the rescue
