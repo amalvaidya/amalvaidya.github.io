@@ -13,17 +13,17 @@ Autoencoders are a good place to start since they'll demonstrate why the idea of
 For this example we'll try and generate some faces from the famous [CelebA](https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) dataset. The dataset contains more than 200 thousand images of celebrities. The images have also been cropped so that faces are centred, which makes the machine learning task a bit easier.
 
 ::: {#fig-celeba layout-ncol=3}
-![](images/celebA_val_set_23.png){}
+![](images/vae/celebA_val_set_23.png){}
 
-![](images/celebA_val_set_123.png){}
+![](images/vae/celebA_val_set_123.png){}
 
-![](images/celebA_val_set_453.png){}
+![](images/vae/celebA_val_set_453.png){}
 
-![](images/celebA_val_set_623.png){}
+![](images/vae/celebA_val_set_623.png){}
 
-![](images/celebA_val_set_645.png){}
+![](images/vae/celebA_val_set_645.png){}
 
-![](images/celebA_val_set_2645.png){}
+![](images/vae/celebA_val_set_2645.png){}
 
 Examples from CelebA validation set
 :::
@@ -70,49 +70,72 @@ Keeping things simple and training the model using the Adam optimiser for 10 epo
 A side by side comparison of input and output images of the autoencoder should give some sense of how well it's performing.
 
 ::: {#fig-aegen_in layout-ncol=3}
-![](images/celebA_test_set_7961.png){}
+![](images/vae/celebA_test_set_7961.png){}
 
-![](images/celebA_test_set_8842.png){}
+![](images/vae/celebA_test_set_8842.png){}
 
-![](images/celebA_test_set_8970.png){}
+![](images/vae/celebA_test_set_8970.png){}
 
 Original images
 :::
 
 ::: {#fig-aegen_out layout-ncol=3}
-![](images/ae_gen_test_set_7961.png){}
+![](images/vae/ae_gen_test_set_7961.png){}
 
-![](images/ae_gen_test_set_8842.png){}
+![](images/vae/ae_gen_test_set_8842.png){}
 
-![](images/ae_gen_test_set_8970.png){}
+![](images/vae/ae_gen_test_set_8970.png){}
 
 Autoencoder output
 :::
 
-A side by side comparison shows that while a lot of detail is lost the reconstructed image does resemble the original. At the very least it does look like a human face! What's interesting is that it's not just blurry, some details are lot entirely. Things like jewellery and ties are lost completely. This likely because that information doesn't make it though the bottleneck since its less important than other facial characteristics. More importantly, it should now be possible to create new images. 
-
-## Generating images
-
-Generating images should be as easy as generating new latent vectors and throwing them into the decoder. In this case these are 200 dimensional vectors. How do we go about generating new latent vectors that correspond to new faces. VAEs have an answer to this question but for now we can just try and sample some random vectors what look somewhat like the latent vectors from our validation set. 
-To do this first encode the validation set and look at the 200 distributions corresponding to each dimension of the latent vectors. 
+A side by side comparison shows that while a lot of detail is lost the reconstructed images do resemble the originals. At the very least they look like human faces! What's interesting is that it's not just blurry, some of the fine details are lost. Subtle things like where the eyes are pointing and the asymmetry of a smile. Some things like jewellery and ties are lost completely. 
+This happens because that information doesn't make it though the bottleneck, probably since it's less important than other facial characteristics when it comes to reconstructing pixel values. 
+When information is missing the decoder just substitues it with something that "sort of works" for most training examples, or misses it entirely. Its definitely possible to do better at this stage but the decoder does seem to be able to generate faces. 
 
 :::{.callout-tip}
-## The decoder
-If there is interest I can make the pre-trained decoder available so that you can try an generate images with it yourself. 
+## Making the models public
+If there is interest I can make the pre-trained decoder available so that you can try an generate images with it yourself.
 :::
 
-### Exploring the latent space
+## Generating (new) images
 
+This is where things get tricky. It should be possible to generate new faces by creating new latent vectors and passing them through the decoder. What isn't clear however is how to generate the latent vectors. The problem of generating faces has now turned into the problem of generating latent vectors. This is the issue that VAEs address and is a good way to understand the underlying assumptions. 
 
+Before we explore that however, we can see what happens if we try and make faces by taking an educated guess at what reasonable latent vectors look like. Remember, the goal is generate faces that are realistic and human looking, but distinct from those that are in the dataset. 
+We can try and be clever and encode a set of images from the test set, take the mean and std values of the latent vectors generated and, in a bit of a hand-wavey attempt to generate vectors from the same distribution as the encoded sample, generate new vectors by sampling from a normal distribution with the same parameters.
 
+::: {#fig-celeba layout-ncol=3}
+![](images/vae/ae_random_gen_0.png){}
+
+![](images/vae/ae_random_gen_1.png){}
+
+![](images/vae/ae_random_gen_2.png){}
+
+![](images/vae/ae_random_gen_3.png){}
+
+![](images/vae/ae_random_gen_4.png){}
+
+![](images/vae/ae_random_gen_5.png){}
+
+Passing random latent vectors through the decoder
+:::
+
+ Turns out this doesn't work so well. If you squint at some of these image you can just about see a tortured face peering out from under the random blobs of colour, but nothing like the image that were generated above. This is the problem with using models like autoencoders to generate new data. There are no constraints on what values the latent vectors take, so when it comes to trying to generate new images you're stuck. 
+
+:::{.callout-note}
+Going a step further and generating vectors by using the mean and std of each dimension independetly generates slightly more realistic looking images, but similar problems are observed.
+:::
 
 # VAEs to the rescue
 
-some words 
 
 ### The reparametrisation trick
 
 ## Adding the V in VAE
+
+
+
 
 
 
