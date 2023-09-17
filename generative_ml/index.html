@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Intrinsic order - Generative AI</title>
+<title>Intrinsic order - What is a generative model?</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -104,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../generative_ml/index.html">Generative AI</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../generative_ml/index.html">What is a generative model?</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -119,7 +119,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../generative_ml/index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Generative AI</span></a>
+ <span class="menu-text">What is a generative model?</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -134,20 +134,14 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul class="collapse">
-  <li><a href="#what-is-a-generative-model" id="toc-what-is-a-generative-model" class="nav-link active" data-scroll-target="#what-is-a-generative-model">What is a generative model?</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Generative AI</h1>
+<h1 class="title">What is a generative model?</h1>
 </div>
 
 
@@ -162,13 +156,11 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="what-is-a-generative-model" class="level1">
-<h1>What is a generative model?</h1>
-<p>Typically we think of image generation and LLMs, but this description covers a huge range of models. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the “data generating process” of a given observable. Doing this well is something discussed often when people try and come up with <a href="https://betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html">principled ways</a> to build statistical models.</p>
-<p>Instead I’ll focus on deep learning and the kinds of models that have helped hype up generative AI. Just remember that with a generative model we want to be able to generate data that looks similar to our training data. That can be unconditional (just generating random faces) or conditioned on other data (think LLMs).</p>
+<p>In the most general terms any model that can generate samples from a data distribution is a generative model. Typically we think of image generation and LLMs, but this description covers a huge range of things. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the <em>data generating process</em> of a given observable. There are plenty of <a href="(https://betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html)">good resources</a> on principled ways to build these kinds of statistical models.</p>
+<p>Instead I’ll focus on deep learning and the kinds of models that have driven the spike in google searches for “generative AI”. Just remember that with a generative model we want to be able to generate data that looks similar to our training data. I will provide all the code and models that I use as well, so you can play around with the concepts discussed.</p>
 <section id="sampling-from-distributions" class="level3">
 <h3 class="anchored" data-anchor-id="sampling-from-distributions">Sampling from distributions</h3>
-<p>At the simplest level any model that can generate samples, <span class="math inline">\(x\)</span>, from a data distribution <span class="math inline">\(p(x)\)</span> is a generative model. Most of the time however <span class="math inline">\(p(x)\)</span> is going to be something complicated like the distribution of all the cat photos in the world. Generative models try and sample from these distributions by first generating samples from a known distribution, <span class="math inline">\(z\)</span>, and then learning how to transform them into samples from <span class="math inline">\(x\)</span>.</p>
+<p>Returning to the original definition, any model that can generate samples, <span class="math inline">\(x\)</span>, from a data distribution <span class="math inline">\(p(x)\)</span> is a generative model. Most of the time however <span class="math inline">\(p(x)\)</span> is going to be something complicated like the distribution of all the cat photos in the world. Generative models try and sample from these distributions by first generating samples from a known distribution, <span class="math inline">\(z\)</span>, and then learning how to transform them into samples from <span class="math inline">\(x\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -179,15 +171,14 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Models like LLMs do something a little different. They generate text by learning to predict the probability of <span class="math inline">\(x\)</span> being the next token <em>conditioned</em> on the previous tokens in the sequence <span class="math inline">\(p(x_i | x_{_i-1}...)\)</span>.</p>
+<p>Language models do something a little different. Text is represented as seqeunce of text segments called tokens. They generate text by learning to predict the probability of <span class="math inline">\(x\)</span> being the next token <em>conditioned</em> on the previous tokens in the sequence <span class="math inline">\(p(x_i | x_{_i-1}...)\)</span>.</p>
 </div>
 </div>
-<p>This might sound mysterious but the same idea can be used to generate samples from arbitrarty statistical distributions. The method, called <strong>inverse transform sampling</strong>, works by taking a sample, <span class="math inline">\(z\)</span>, from <span class="math inline">\(\text{U}(0, 1)\)</span> and then applying a transformation <span class="math inline">\(g(z)\)</span> so that <span class="math display">\[
-x = g(z).
-\]</span> In this case <span class="math inline">\(g(z)\)</span> is the inverse cumalative distribution function of <span class="math inline">\(x\)</span>. The first generative model that we’ll dicuss does the same thing by replacing <span class="math inline">\(x\)</span> with photos and <span class="math inline">\(g(z)\)</span> with a neural network.</p>
+<p>This might sound mysterious but the same idea can be used to generate samples from arbitrarty statistical distributions. The method, called <strong>inverse transform sampling</strong>, works by taking a sample, <span class="math inline">\(z\)</span>, from a uniform distribution <span class="math inline">\(\text{U}(0, 1)\)</span> and then applying a transformation <span class="math inline">\(p(z)\)</span> so that <span class="math display">\[
+x = p(z).
+\]</span> In this case <span class="math inline">\(p(z)\)</span> is the inverse cumalative distribution function of <span class="math inline">\(x\)</span>. The first generative model that we’ll dicuss does the same thing by replacing <span class="math inline">\(x\)</span> with images and <span class="math inline">\(p(z)\)</span> with a neural network.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
