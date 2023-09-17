@@ -1,8 +1,6 @@
 ---
-title: Generative AI
+title: What is a generative model?
 ---
-
-# What is a generative model?
 
 In the most general terms any model that can generate samples from a data distribution is a generative model. Typically we think of image generation and LLMs, but this description covers a huge range of things. We could begin by talking about manual model building, coming up wtih statistical models that try and capture the *data generating process* of a given observable. There are plenty of [good resources]((https://betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html)) on principled ways to build these kinds of statistical models. 
 
@@ -17,10 +15,10 @@ Language models do something a little different. Text is represented as seqeunce
 
 :::
 
-This might sound mysterious but the same idea can be used to generate samples from arbitrarty statistical distributions. The method, called **inverse transform sampling**, works by taking a sample, $z$, from $\text{U}(0, 1)$ and then applying a transformation $g(z)$ so that
+This might sound mysterious but the same idea can be used to generate samples from arbitrarty statistical distributions. The method, called **inverse transform sampling**, works by taking a sample, $z$, from a uniform distribution $\text{U}(0, 1)$ and then applying a transformation $p(z)$ so that
 $$
-x = g(z).
+x = p(z).
 $$
-In this case $g(z)$ is the inverse cumalative distribution function of $x$. The first generative model that we'll dicuss does the same thing by replacing $x$ with images and $g(z)$ with a neural network.
+In this case $p(z)$ is the inverse cumalative distribution function of $x$. The first generative model that we'll dicuss does the same thing by replacing $x$ with images and $p(z)$ with a neural network.
 
 

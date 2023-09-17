@@ -20,7 +20,7 @@ website:
         - index.qmd
         - about.qmd
 
-    - title: "Generative ML"
+    - title: "What is a generative model?"
       contents: 
         - generative_ml/index.qmd
         - generative_ml/vae_1.md

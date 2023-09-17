@@ -2,3 +2,4 @@
 title: "A Machine Learning blog"
 ---
 
+A blog filled with side projects and things I want to learn. having a place to put things is mainly a way to fore me to be more structured in what I do
