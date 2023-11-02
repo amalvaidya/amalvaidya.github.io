@@ -18,12 +18,13 @@ website:
       stlye: "floating"
       contents:
         - index.qmd
-        - about.qmd
+  #      - about.qmd
 
     - title: "What is a generative model?"
       contents: 
         - generative_ml/index.qmd
         - generative_ml/vae_1.md
+        - generative_ml/diffusion.md
     
        
 

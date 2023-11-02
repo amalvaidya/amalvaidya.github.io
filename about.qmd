@@ -2,4 +2,21 @@
 title: About
 ---
 
-Fill this in when you have time
+:::: {.columns}
+
+::: {.column width="60%"}
+My name's Amal and I'm currently working as a ML scientist at J. P. Morgan in London. My work currently involves working with LLMs, thinking about efficient ways to fine-tune them and detect hallucinations in specific scenarios. I have a broad range of interests in the ML space including Bayesian inference, timeseries and generative modelling.
+
+
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="35%"}
+![ ](images/mugshot_cropped.jpg)
+:::
+
+::::
+

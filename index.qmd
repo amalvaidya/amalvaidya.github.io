@@ -2,4 +2,23 @@
 title: "A Machine Learning blog"
 ---
 
-A blog filled with side projects and things I want to learn. having a place to put things is mainly a way to fore me to be more structured in what I do
+:::: {.columns}
+
+::: {.column width="60%"}
+::: {style="font-size:20px"}
+Hi! My name's Amal 
+:::
+I'm currently working as a ML scientist at J. P. Morgan in London. My work currently involves working with LLMs, thinking about efficient ways to fine-tune them and detect hallucinations in specific scenarios. I have a broad range of interests in the ML space including Bayesian inference, timeseries and generative modelling.
+
+
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="35%"}
+![ ](images/mugshot_cropped.jpg)
+:::
+
+::::
