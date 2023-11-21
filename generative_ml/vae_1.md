@@ -200,11 +200,11 @@ P(x) &= \int P(x | z; \theta)Q(z | x) dz \\
 &= \mathbb{E}_{z \sim Q}P(x | z; \theta).
 \end{aligned}
 $$
-Our goal is now to re-write this in terms of an expression which we can evaluate easily and therefore maximise. We do this by defining the ELBO (evidence lower bound) and showing that maximising the ELBO also maximises $P(x)$. 
+Our goal is now to re-write this in terms of an expression which we can evaluate easily and therefore maximise. We do this by defining the ELBO (evidence lower bound) and showing that maximising the ELBO also maximises $P(x)$. (Or, $\ln P(x)$, since the logarithm is a monotonic function.)
 
 ### Deriving the ELBO
 
-Starting from the definition of $P(x)$ and taking the natural log
+Starting from the definition of $P(x)$ and taking the natural logarithm,
 \begin{aligned}
 \ln P(x) &= \ln \left[  \mathbb{E}_{z \sim Q} P(x)\right] = \mathbb{E}_{z \sim Q} \ln  P(x)  &(P(x)~\text{is independent of}~z) \\
 
@@ -249,7 +249,15 @@ There are several methods to derive the ELBO. One method relies on Jensen's ineq
  
 ## Building and training VAE
 
-Now that we've developed a theoretical understanding of that a VAE is, it'll be easy to turn the autoencoder architecture we've used already into one.
+Now that we've developed a theoretical understanding of that a VAE is, it should be possible to map the autoencoder architecture we've used already into one. The encoder does the job of $Q(z | x)$, mapping images to latent vectors. The main difference however is that the decoder should generate a distribution of $z$ given $x$ rather than a scalar vector. Assuming this distribution is a multivariate Gaussian, this can be done by modifying the decoder to output two vectors, one that represents the mean $\mu$ and one for (the log of) the variance $\sigma$. The decoder in turn represents $P(x | z).$ We could sample values probabilistically for the pixel densities but this isn't necessary in order to calculate the loss and typically isn't done.
+
+### defining the loss function 
+
+The first term of the loss function, based on the ELBO, represents the likelihood of generating the target image $x$ and can be interpreted as the reconstruction error. In the first example we used the MSE loss for our reconstruction error. Under the assumption that the pixel values are drawn from normal distributions the MSE loss can be interpreted as a likelihood, so that part can remain the same. Defining the second term can be defined relatively easily since we've fixed both $P(z)$ and $Q(z | x)$ to be a multivariate Guassians. The loss function then becomes
+
+
+
+
 
 ::: {.callout-caution collapse="true"}
 ## The $\beta$-VAE
@@ -260,7 +268,7 @@ blah
 
 
 
-### The reparametrisation trick
+#### The reparametrisation trick
 
 
 % mention this after adding something about P(z|x)
@@ -273,7 +281,73 @@ Not only will be now be able to sample latent vectors from
 
 
 
+:::{.callout-tip collapse="true"}
+## A PyTorch example
 
+It's possible to make relatively small modifications to an autoencoder implemented in PyTorch and turn it into a VAE. 
+
+```python
+class VAE(AutoEncoder):
+    """construct a VAE by using the basic same skeleton
+    as the AutoEncoder, but by adding and overwriting a few things
+    """
+
+    def __init__(
+        self,
+        latent_dim,
+        input_channels=3,
+        encoder_channel_out_sizes=[16, 32, 64, 128, 256],
+        input_image_h_w=(218, 178),
+    ):
+        super().__init__(
+            latent_dim,
+            input_channels,
+            encoder_channel_out_sizes,
+            input_image_h_w,
+        )
+        # Add another linear layer for the log variance
+        self.encoder_linear_logvar = nn.Linear(self.linear_layer_size, self.latent_dim)
+
+    @staticmethod
+    def reparameterise(mu, logvar):
+        """Implement the reparameterisation trick"""
+        # scale the log variance to std
+        std = torch.exp(0.5 * logvar)
+        # sample from a standard noem
+        normal_noise = torch.randn_like(std)
+        return mu + (std * normal_noise)
+
+    def encode(self, input: torch.Tensor):
+        """Helper function making it easier to encode
+        images
+        """
+        x = self.encoder(input)
+        mu = self.encoder_linear_mean(x)
+        logvar = self.encoder_linear_logvar(x)
+        return self.reparameterise(mu, logvar), mu, logvar
+
+    def forward(self, input):
+        encoded, mu, logvar = self.encode(input)
+        return self.decode(encoded), mu, logvar
+
+    def loss_function(self, input, target, mu, logvar):
+        # summed over each element in the latent space
+        # the mean is taken over training examples
+        kld_loss = torch.mean(
+            -0.5 * torch.sum(1 + logvar - mu**2 - logvar.exp(), dim=1), dim=0
+        )
+        kld_loss = kld_loss * 1e-5
+
+        reconstruction_loss = nn.functional.mse_loss(input, target)
+
+        return (
+            reconstruction_loss + kld_loss,
+            reconstruction_loss.detach(),
+            kld_loss.detach(),
+        )
+```
+
+:::
 
 
 
