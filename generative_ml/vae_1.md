@@ -249,7 +249,17 @@ There are several methods to derive the ELBO. One method relies on Jensen's ineq
  
 ## Building and training VAE
 
-Now that we've developed a theoretical understanding of that a VAE is, it should be possible to map the autoencoder architecture we've used already into one. The encoder does the job of $Q(z | x)$, mapping images to latent vectors. The main difference however is that the decoder should generate a distribution of $z$ given $x$ rather than a scalar vector. Assuming this distribution is a multivariate Gaussian, this can be done by modifying the decoder to output two vectors, one that represents the mean $\mu$ and one for (the log of) the variance $\sigma$. The decoder in turn represents $P(x | z).$ We could sample values probabilistically for the pixel densities but this isn't necessary in order to calculate the loss and typically isn't done.
+Now that we've developed a theoretical understanding of that a VAE is, it should be possible to map the autoencoder architecture we've used already into one. The encoder does the job of $Q(z | x)$, mapping images to latent vectors. The main difference however is that the encoder should generate a distribution of $z$ given $x$ rather than a scalar vector. The decoder in turn represents $P(x | z).$ This introduces a new challenge. How can we sample from a parametrised distribution while training a neural network via gradient descent? We need to be able to calculate the gradient of the loss with respect to all of the trainable parameters in the network.
+
+#### The reparametrisation trick
+
+Turns out that there is an elegant solution. The reparametrisation trick separates the stochastic part from the trainable parameters of the distribution. The encoder needs to generate samples drawn from a multivariate Gaussian distribution, parametrised by mean vector $\mu$ and the variance $\sigma$. This can be done by modifying the autoencoder encoder to output two vectors, one that represents the mean $\mu$ and one for (the log of) the variance $\sigma$. The stochastic encoder output is then created by sampling a vector from the standard normal distribution and then shifting and scaling appropriately
+$$
+Q(z | x) = \mu + ( \mathcal{N}(0, 1) \cdot \sigma  ).
+$$
+During training we can therefore still calculate gradients with respect to $\mu$ and $\sigma$. We could sample values probabilistically for the pixel densities but this isn't necessary in order to calculate the loss and typically isn't done.
+
+
 
 ### defining the loss function 
 
@@ -265,10 +275,26 @@ The first term of the loss function, based on the ELBO, represents the likelihoo
 blah
 :::
 
+![The distribution of latent dimension vectors as encoded from the validation set](images/vae/VAE_latent_distributions.png)
 
 
 
-#### The reparametrisation trick
+::: {#fig-celeba layout-ncol=3}
+![](images/vae/vae_random_gen_3.png){}
+
+![](images/vae/vae_random_gen_1.png){}
+
+![](images/vae/vae_random_gen_2.png){}
+
+![](images/vae/vae_random_gen_9.png){}
+
+![](images/vae/vae_random_gen_13.png){}
+
+![](images/vae/vae_random_gen_12.png){}
+
+Passing random latent vectors through the VAE generates somewhat realistic looking faces.
+:::
+
 
 
 % mention this after adding something about P(z|x)
