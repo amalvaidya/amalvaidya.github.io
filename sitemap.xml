@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://amalvaidya.github.io/generative_ml/vae_2.html</loc>
-    <lastmod>2023-09-17T09:27:05.051Z</lastmod>
+    <loc>https://amalvaidya.github.io/generative_ml/vae_1.html</loc>
+    <lastmod>2023-11-25T19:07:18.581Z</lastmod>
   </url>
   <url>
-    <loc>https://amalvaidya.github.io/generative_ml/index.html</loc>
-    <lastmod>2023-09-17T09:27:04.531Z</lastmod>
+    <loc>https://amalvaidya.github.io/generative_ml/diffusion.html</loc>
+    <lastmod>2023-11-25T19:07:17.881Z</lastmod>
   </url>
   <url>
     <loc>https://amalvaidya.github.io/about.html</loc>
-    <lastmod>2023-09-17T09:27:04.161Z</lastmod>
+    <lastmod>2023-11-25T19:07:17.541Z</lastmod>
   </url>
   <url>
     <loc>https://amalvaidya.github.io/index.html</loc>
-    <lastmod>2023-09-17T09:27:04.341Z</lastmod>
+    <lastmod>2023-11-25T19:07:17.721Z</lastmod>
   </url>
   <url>
-    <loc>https://amalvaidya.github.io/generative_ml/vae_1.html</loc>
-    <lastmod>2023-09-17T09:27:04.881Z</lastmod>
+    <loc>https://amalvaidya.github.io/generative_ml/index.html</loc>
+    <lastmod>2023-11-25T19:07:18.071Z</lastmod>
   </url>
 </urlset>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Intrinsic order - 1. VAEs: Variational autoencoders</title>
+<title>Intrinsic order - VAEs: Variational autoencoders</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -104,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../generative_ml/vae_1.html">1. VAEs: Variational autoencoders</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../generative_ml/vae_1.html">VAEs: Variational autoencoders</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -125,7 +159,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../generative_ml/vae_1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">1. VAEs: Variational autoencoders</span></a>
+ <span class="menu-text">VAEs: Variational autoencoders</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../generative_ml/diffusion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Diffusion models</span></a>
   </div>
 </li>
     </ul>
@@ -138,14 +178,19 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#starting-simple-autoencoders" id="toc-starting-simple-autoencoders" class="nav-link active" data-scroll-target="#starting-simple-autoencoders">Starting simple: Autoencoders</a>
+  <li><a href="#starting-simple-with-autoencoders" id="toc-starting-simple-with-autoencoders" class="nav-link active" data-scroll-target="#starting-simple-with-autoencoders">Starting simple with autoencoders</a>
   <ul class="collapse">
   <li><a href="#defining-a-dataset" id="toc-defining-a-dataset" class="nav-link" data-scroll-target="#defining-a-dataset">Defining a dataset</a></li>
   <li><a href="#what-is-an-autoencoder" id="toc-what-is-an-autoencoder" class="nav-link" data-scroll-target="#what-is-an-autoencoder">What is an autoencoder?</a></li>
   <li><a href="#model-structure-and-training" id="toc-model-structure-and-training" class="nav-link" data-scroll-target="#model-structure-and-training">Model structure and training</a></li>
   <li><a href="#generating-new-images" id="toc-generating-new-images" class="nav-link" data-scroll-target="#generating-new-images">Generating (new) images</a></li>
   </ul></li>
-  <li><a href="#vaes-to-the-rescue" id="toc-vaes-to-the-rescue" class="nav-link" data-scroll-target="#vaes-to-the-rescue">VAEs to the rescue</a></li>
+  <li><a href="#vaes-to-the-rescue" id="toc-vaes-to-the-rescue" class="nav-link" data-scroll-target="#vaes-to-the-rescue">VAEs to the rescue</a>
+  <ul class="collapse">
+  <li><a href="#thinking-in-terms-of-distributions" id="toc-thinking-in-terms-of-distributions" class="nav-link" data-scroll-target="#thinking-in-terms-of-distributions">Thinking in terms of distributions</a></li>
+  <li><a href="#what-is-a-vae" id="toc-what-is-a-vae" class="nav-link" data-scroll-target="#what-is-a-vae">What is a VAE?</a></li>
+  <li><a href="#building-and-training-vae" id="toc-building-and-training-vae" class="nav-link" data-scroll-target="#building-and-training-vae">Building and training VAE</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -154,7 +199,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">1. VAEs: Variational autoencoders</h1>
+<h1 class="title">VAEs: Variational autoencoders</h1>
 </div>
 
 
@@ -169,9 +214,10 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="starting-simple-autoencoders" class="level1">
-<h1>Starting simple: Autoencoders</h1>
-<p>If you’re familiar with building and training neural networks autoencoders are a good place to start since they’ll demonstrate why the idea of being able to sample from a distribution is important. The way they work is also pretty intuitive. As we progress it will become clear why they’re not suitable for generative modelling and the changes we need to make to bridge the gap. Autoencoders learn low dimensional representations by passing data through an information bottleneck and try to reconstruct it at the other end.</p>
+<p>Variational Autoencoders (VAEs) were introduced by <a href="https://arxiv.org/abs/1312.6114">Kingma et al</a> as an efficient method to learn posterior distributions using gradient descent. The paper describes how neural networks can be used to efficiently create models that can generate complex data by sampling from simple, known distributions. For those who are new to generative modelling contrasting VAEs with autoencoders can help highlight the key ideas.</p>
+<section id="starting-simple-with-autoencoders" class="level1">
+<h1>Starting simple with autoencoders</h1>
+<p>If you’re familiar with building and training neural networks autoencoders are a good place to start. They’ll demonstrate why the idea of being able to sample from a distribution is important and the way they work is also fairly intuitive. As we progress it will become clear why they’re not suitable for generative modelling and we’ll discuss the changes needed to bridge the gap. Autoencoders learn low dimensional representations by passing data through an information bottleneck and try to reconstruct it at the other end. While they’re often used in representation learning tasks their structure is fairly similar to that of a VAE. To begin we’ll build one and try to use it to generate images of faces.</p>
 <section id="defining-a-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="defining-a-dataset">Defining a dataset</h2>
 <p>For this example we’ll try and generate some faces from the famous <a href="https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html">CelebA</a> dataset. The dataset contains more than 200 thousand images of celebrities. The images have also been cropped so that faces are centred, which makes the machine learning task a bit easier.</p>
@@ -231,7 +277,7 @@ L(x, g(f(x))).
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+Choice of loss function
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -332,46 +378,281 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Going a step further and generating vectors by using the mean and standard deviation of each dimension independetly generates slightly more realistic looking images, but similar problems are observed.</p>
+<p>Going a step further and generating vectors by using the mean and standard deviation of each dimension independently generates slightly more realistic looking images, but similar problems are observed.</p>
 </div>
 </div>
 </section>
 </section>
 <section id="vaes-to-the-rescue" class="level1">
 <h1>VAEs to the rescue</h1>
-<p>VAEs address the problem of sampling the latent vectors directly by constraining them to be drawn from a known distribution. This is the equivalent of putting a prior on the <span class="math inline">\(z\)</span> vectors in a Bayesian framework. Typically we choose this distribution to be a isotropic multidimensional Gaussian, assuming no correlation between any of the dimensions of the latent vector: <span class="math display">\[
+<p>Now that you’re convinced that just using autoencoders is insufficient we can explore the changes introduced by VAEs. Instead of mapping individual data points to points in latent space VAEs learn latent space distributions that are likely to generate realistic looking data.</p>
+<section id="thinking-in-terms-of-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="thinking-in-terms-of-distributions">Thinking in terms of distributions</h2>
+<p>Instead of optimising encoder and decoder functions consider a VAE as a latent variable model. VAEs address the problem of sampling the latent vectors directly by constraining them to be drawn from a known distribution, modelling the join probability of the latent variables <span class="math inline">\(z\)</span> and the data <span class="math inline">\(x\)</span>. This is the equivalent of putting a prior on the <span class="math inline">\(z\)</span> vectors in a Bayesian framework. Typically we choose this distribution to be a isotropic multidimensional Gaussian, assuming no correlation between any of the dimensions of the latent vector: <span class="math display">\[
 P(z) \sim \mathcal{N}(0, I).
 \]</span> The choice of distribution is just an assumptions but has some useful properties that we’ll see later. This change in modelling assumptions has a significant impact on how VAEs are trained and it becomes clear that they’re actually only superficially similar to autoencoders.</p>
 <div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Why a Gaussian?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A natural question to ask is whether the choice of prior distribution constrains the model outputs in anyway. The good news is that it doesn’t, any <span class="math inline">\(d\)</span> dimensional distribution can be generated by sampling <span class="math inline">\(d\)</span> variables from a normal distribution and transforming them with a sufficiently complex function. This is how inverse-transform sampling works, as discussed on <a href="../generative_ml/index.html">this page</a>.</p>
+</div>
+</div>
+</div>
+<p>We can write down the model as the join probability of the latent vectors and the data, <span class="math inline">\(P(x, z)\)</span>. Using the chain rule of probability we can write this out in a way that better defines the generative process: <span class="math display">\[
+P(x, z) = P(x | z)P(z)
+\]</span> where the process is</p>
+<ol type="1">
+<li>Sample a latent vector <span class="math inline">\(z \sim P(z)\)</span></li>
+<li>Generate a data point <span class="math inline">\(x \sim P(x | z)\)</span>.</li>
+</ol>
+<p>It is helpful to rewrite <span class="math inline">\(P(x | z)\)</span> as <span class="math inline">\(P(x | z; \theta)\)</span>, where <span class="math inline">\(\theta\)</span> represents the parameters of the distribution <span class="math inline">\(P_{x|z}\)</span>. What we want to optimise (maximise in this case), with respect to <span class="math inline">\(\theta\)</span>, is the probability of each training example <span class="math inline">\(x\)</span> under the generative process <span class="math display">\[
+\begin{aligned}
+P(x) &amp; = \int P(x | z; \theta)P(z) dz. \\
+&amp; = \mathbb{E}_{z \sim P(z)}P(x | z; \theta)
+\end{aligned}
+\]</span> We have already chosen how to define <span class="math inline">\(P(z)\)</span> but we still need to compute the integral over <span class="math inline">\(z\)</span>. There are some key issues that make this quite difficult.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+The Kullback–Leibler (KL) divergence
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A natural question to ask is whether the choice of prior distribution constrains the model outputs in anyway. The good news is that it doesn’t, any <span class="math inline">\(n\)</span> dimensional distribution can be generated by sampling <span class="math inline">\(d\)</span> variables from a normal distribution and transforming them with a sufficiently complex function. This is how inverse-transform sampling works, as discussed on <a href="../generative_ml/index.html">this page</a>.</p>
+<p>The KL divergence is defined as <span class="math display">\[
+\begin{aligned}
+\mathcal{D}(P \parallel Q) &amp;= \int p(x) \log \left( \frac{p(x)}{q(x)} \right) dx \\
+&amp;= \mathbb{E}_{p(x)} \left[ \frac{p(x)}{q(x)} \right]
+\end{aligned}
+\]</span> and is used as a measure to describe how one probability distribution differs from another.</p>
 </div>
 </div>
-<section id="thinking-in-terms-of-distributions" class="level3">
-<h3 class="anchored" data-anchor-id="thinking-in-terms-of-distributions">Thinking in terms of distributions</h3>
-<p>Instead of optimising encoder and decoder functions consider a VAE as a latent variable model where were are modelling the join probability <span class="math inline">\(P(x, z)\)</span>. Using the chain rule of probability we can write this out in a way that better defines the generative process: <span class="math display">\[
-P(x, z) = P(x | z)P(z)
-\]</span> where the process is</p>
-<ol type="1">
-<li>Sample a latent vector <span class="math inline">\(z \sim p(z)\)</span></li>
-<li>Generate a data point <span class="math inline">\(x \sim P(x | z)\)</span>.</li>
-</ol>
-<p>What we want to optimise (maximise in this case) is the probability of each training example <span class="math inline">\(x\)</span> under the generative process <span class="math display">\[
-P(x) = \int P(x | z)p(z) dz.
-\]</span> In principle we can do this directly by sampling <span class="math inline">\(n\)</span> values of <span class="math inline">\(z\)</span> and then computing <span class="math inline">\(P(x) \approx \frac{1}{n} \sum_i P(x | z_i)\)</span>. The problem here is just how many samples it would take. If you consider all the possible configurations of the pixels in the images <span class="math inline">\(x\)</span> its obvious that for the vast majority of the time <span class="math inline">\(P(x|z)\)</span> will be almost zero and sampling the corresponding <span class="math inline">\(z\)</span> values will not help improve our estimates of <span class="math inline">\(P(x|z)\)</span>. The discussion in <a href="https://arxiv.org/abs/1606.05908">this</a> excellent introduction goes into more detail. What makes VAEs more efficient is that during training we try and sample values of <span class="math inline">\(z\)</span> that are likely to produce <span class="math inline">\(x\)</span>.</p>
-<p>% mention this after adding something about p(z|x) It might be a good time to pause here before we discuss how we can optimise this and think about why this formulation helps us generate new data. During training</p>
-<p>Not only will be now be able to sample latent vectors from</p>
 </section>
-<section id="the-reparametrisation-trick" class="level3">
-<h3 class="anchored" data-anchor-id="the-reparametrisation-trick">The reparametrisation trick</h3>
+<section id="what-is-a-vae" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-a-vae">What is a VAE?</h2>
+<p>In principle we can maximise <span class="math inline">\(P(x)\)</span> directly by sampling <span class="math inline">\(n\)</span> values of <span class="math inline">\(z\)</span> and then computing <span class="math inline">\(P(x) \approx \frac{1}{n} \sum_i P(x | z_i; \theta)\)</span>. The problem here is just how many samples it would take. If you consider all the possible configurations of the pixels in the images <span class="math inline">\(x\)</span> its obvious that for the vast majority of the time <span class="math inline">\(P(x|z; \theta)\)</span> will be almost zero and sampling the corresponding <span class="math inline">\(z\)</span> values will not help improve our estimates of <span class="math inline">\(P(x|z; \theta)\)</span>. This makes using traditional inference techniques such as Markov Chain Monte Carlo (MCMC) difficult, even before you consider the number of parameters. The discussion in <a href="https://arxiv.org/abs/1606.05908">this</a> excellent introduction goes into more detail.</p>
+<p>What makes VAEs more efficient is that during training we try and sample values of <span class="math inline">\(z\)</span> that are likely to produce <span class="math inline">\(x\)</span>. This is done by introducing a new function <span class="math inline">\(Q( z | x)\)</span>, which takes a value of <span class="math inline">\(x\)</span> and returns a distribution over <span class="math inline">\(z\)</span> values which are likely to produce <span class="math inline">\(x\)</span>. Where the generative model we’ve describe is analogous to the decoder part of the autoencoder this part is analogous to the encoder.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Notation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There is a bit of notation overload here, which I have coped from <a href="https://arxiv.org/abs/1606.05908">Doersch</a>. I’m using P(…) to sometimes refer to generic probability distributions and sometimes specific functions. Hopefully with context its pretty clear in this example.</p>
+</div>
+</div>
+<p>Since we now sample <span class="math inline">\(z \sim Q(z | x)\)</span> our definition for <span class="math inline">\(P(x)\)</span> becomes <span class="math display">\[
+\begin{aligned}
+P(x) &amp;= \int P(x | z; \theta)Q(z | x) dz \\
+&amp;= \mathbb{E}_{z \sim Q}P(x | z; \theta).
+\end{aligned}
+\]</span> Our goal is now to re-write this in terms of an expression which we can evaluate easily and therefore maximise. We do this by defining the ELBO (evidence lower bound) and showing that maximising the ELBO also maximises <span class="math inline">\(P(x)\)</span>. (Or, <span class="math inline">\(\ln P(x)\)</span>, since the logarithm is a monotonic function.)</p>
+<section id="deriving-the-elbo" class="level3">
+<h3 class="anchored" data-anchor-id="deriving-the-elbo">Deriving the ELBO</h3>
+Starting from the definition of <span class="math inline">\(P(x)\)</span> and taking the natural logarithm,
+<span class="math display">\[\begin{aligned}
+\ln P(x) &amp;= \ln \left[  \mathbb{E}_{z \sim Q} P(x)\right] = \mathbb{E}_{z \sim Q} \ln  P(x)  &amp;(P(x)~\text{is independent of}~z) \\
+
+&amp; =  \mathbb{E}_{z \sim Q} \left[ \ln \frac{P(x | z)P(z)}{P(z | x)} \right] &amp; (\text{Bayes' rule}) \\
+
+&amp; = \mathbb{E}_{z \sim Q} \left[ \ln \frac{P(x | z)P(z)}{P(z | x)} \frac{Q(z | x)}{Q(z | x)} \right] &amp; (\text{multiply by}~1) \\
+
+&amp; = \mathbb{E}_{z \sim Q} \ln P(x | z)
+- \mathbb{E}_{z \sim Q} \left[ \ln \frac{Q(z | x)}{P(z)} \right]  
++ \mathbb{E}_{z \sim Q} \left[ \ln \frac{Q(z | x)}{P(z | x)} \right] \\\\
+
+\ln P(x) &amp;= \mathbb{E}_{z \sim Q} \ln P(x | z) - \mathcal{D}(Q(z | x) \parallel P(z))
+         +
+\underbrace{\mathcal{D}(Q(z | x) \parallel P(z | x))}_{\text{intractable},~\geq 0}.
+\end{aligned}\]</span>
+<p>It’s possible to express the quantity we want to maximise in terms of several terms one of which is The KL divergence of <span class="math inline">\(Q\)</span> with an intractable term <span class="math inline">\(P(z | x)\)</span>. The critical thing consider here is that the KL divergence of any two distributions is always <span class="math inline">\(\geq 0\)</span>. This allows us to write</p>
+<span class="math display">\[\begin{aligned}
+\ln P(x) &amp;\geq \underbrace{
+    \underbrace{
+        \mathbb{E}_{z \sim Q} \ln P(x | z)
+        }_\text{reconstruction error}
+        -
+        \underbrace{
+            \mathcal{D}(Q(z | x) \parallel P(z)).
+        }_\text{fixes the latent}
+}_\text{ELBO}
+\end{aligned}\]</span>
+<p>The ELBO consists of two terms</p>
+<ul>
+<li>One that represents the reconstruction error</li>
+<li>The (negative) KL divergence between <span class="math inline">\(Q\)</span> and the desired distribution of <span class="math inline">\(z\)</span>, <span class="math inline">\(P(z)\)</span>. This adds a larger penalty for versions of <span class="math inline">\(Q\)</span> that generate <span class="math inline">\(z\)</span> distributions that deviate from <span class="math inline">\(P(z)\)</span>.</li>
+</ul>
+<p>Since <span class="math inline">\(P(z)\)</span> is bound to be greater or equal to the ELBO, maximising the ELBO maximises the quantity that we care about.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Alternate derivations
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>There are several methods to derive the ELBO. One method relies on Jensen’s inequality while another starts with KL divergence between <span class="math inline">\(Q(z|x)\)</span> and the unknown distribution <span class="math inline">\(P(z|x)\)</span>. The method I’ve chosen starts from the definition of <span class="math inline">\(P(x)\)</span> given above.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="building-and-training-vae" class="level2">
+<h2 class="anchored" data-anchor-id="building-and-training-vae">Building and training VAE</h2>
+<p>Now that we’ve developed a theoretical understanding of that a VAE is, it should be possible to map the autoencoder architecture we’ve used already into one. The encoder does the job of <span class="math inline">\(Q(z | x)\)</span>, mapping images to latent vectors. The main difference however is that the encoder should generate a distribution of <span class="math inline">\(z\)</span> given <span class="math inline">\(x\)</span> rather than a scalar vector. The decoder in turn represents <span class="math inline">\(P(x | z).\)</span> This introduces a new challenge. How can we sample from a parametrised distribution while training a neural network via gradient descent? We need to be able to calculate the gradient of the loss with respect to all of the trainable parameters in the network.</p>
+<section id="the-reparametrisation-trick" class="level4">
+<h4 class="anchored" data-anchor-id="the-reparametrisation-trick">The reparametrisation trick</h4>
+<p>Turns out that there is an elegant solution. The reparametrisation trick separates the stochastic part from the trainable parameters of the distribution. The encoder needs to generate samples drawn from a multivariate Gaussian distribution, parametrised by mean vector <span class="math inline">\(\mu\)</span> and the variance <span class="math inline">\(\sigma\)</span>. This can be done by modifying the autoencoder encoder to output two vectors, one that represents the mean <span class="math inline">\(\mu\)</span> and one for (the log of) the variance <span class="math inline">\(\sigma\)</span>. The stochastic encoder output is then created by sampling a vector from the standard normal distribution and then shifting and scaling appropriately <span class="math display">\[
+Q(z | x) = \mu + ( \mathcal{N}(0, 1) \cdot \sigma  ).
+\]</span> During training we can therefore still calculate gradients with respect to <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>. We could sample values probabilistically for the pixel densities but this isn’t necessary in order to calculate the loss and typically isn’t done.</p>
+</section>
+<section id="defining-the-loss-function" class="level3">
+<h3 class="anchored" data-anchor-id="defining-the-loss-function">defining the loss function</h3>
+<p>The first term of the loss function, based on the ELBO, represents the likelihood of generating the target image <span class="math inline">\(x\)</span> and can be interpreted as the reconstruction error. In the first example we used the MSE loss for our reconstruction error. Under the assumption that the pixel values are drawn from normal distributions the MSE loss can be interpreted as a likelihood, so that part can remain the same. Defining the second term can be defined relatively easily since we’ve fixed both <span class="math inline">\(P(z)\)</span> and <span class="math inline">\(Q(z | x)\)</span> to be a multivariate Guassians. The loss function then becomes</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+The <span class="math inline">\(\beta\)</span>-VAE
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>blah</p>
+</div>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/vae/VAE_latent_distributions.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">The distribution of latent dimension vectors as encoded from the validation set</figcaption>
+</figure>
+</div>
+<div id="fig-celeba" class="quarto-layout-panel">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/vae/vae_random_gen_3.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/vae/vae_random_gen_1.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/vae/vae_random_gen_2.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/vae/vae_random_gen_9.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/vae/vae_random_gen_13.png" class="img-fluid figure-img"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="images/vae/vae_random_gen_12.png" class="img-fluid figure-img"></p>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5: Passing random latent vectors through the VAE generates somewhat realistic looking faces.</figcaption><p></p>
+</figure>
+</div>
+<p>% mention this after adding something about P(z|x) It might be a good time to pause here before we discuss how we can optimise this and think about why this formulation helps us generate new data. During training</p>
+<p>Not only will be now be able to sample latent vectors from</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A PyTorch example
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>It’s possible to make relatively small modifications to an autoencoder implemented in PyTorch and turn it into a VAE.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> VAE(AutoEncoder):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""construct a VAE by using the basic same skeleton</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">    as the AutoEncoder, but by adding and overwriting a few things</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        latent_dim,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        input_channels<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        encoder_channel_out_sizes<span class="op">=</span>[<span class="dv">16</span>, <span class="dv">32</span>, <span class="dv">64</span>, <span class="dv">128</span>, <span class="dv">256</span>],</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        input_image_h_w<span class="op">=</span>(<span class="dv">218</span>, <span class="dv">178</span>),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    ):</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>            latent_dim,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            input_channels,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>            encoder_channel_out_sizes,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>            input_image_h_w,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Add another linear layer for the log variance</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.encoder_linear_logvar <span class="op">=</span> nn.Linear(<span class="va">self</span>.linear_layer_size, <span class="va">self</span>.latent_dim)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">@staticmethod</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> reparameterise(mu, logvar):</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Implement the reparameterisation trick"""</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># scale the log variance to std</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        std <span class="op">=</span> torch.exp(<span class="fl">0.5</span> <span class="op">*</span> logvar)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># sample from a standard noem</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        normal_noise <span class="op">=</span> torch.randn_like(std)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> mu <span class="op">+</span> (std <span class="op">*</span> normal_noise)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> encode(<span class="va">self</span>, <span class="bu">input</span>: torch.Tensor):</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Helper function making it easier to encode</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">        images</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.encoder(<span class="bu">input</span>)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        mu <span class="op">=</span> <span class="va">self</span>.encoder_linear_mean(x)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        logvar <span class="op">=</span> <span class="va">self</span>.encoder_linear_logvar(x)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.reparameterise(mu, logvar), mu, logvar</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, <span class="bu">input</span>):</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>        encoded, mu, logvar <span class="op">=</span> <span class="va">self</span>.encode(<span class="bu">input</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.decode(encoded), mu, logvar</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> loss_function(<span class="va">self</span>, <span class="bu">input</span>, target, mu, logvar):</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>        <span class="co"># summed over each element in the latent space</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># the mean is taken over training examples</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        kld_loss <span class="op">=</span> torch.mean(</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>            <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> torch.<span class="bu">sum</span>(<span class="dv">1</span> <span class="op">+</span> logvar <span class="op">-</span> mu<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> logvar.exp(), dim<span class="op">=</span><span class="dv">1</span>), dim<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>        kld_loss <span class="op">=</span> kld_loss <span class="op">*</span> <span class="fl">1e-5</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>        reconstruction_loss <span class="op">=</span> nn.functional.mse_loss(<span class="bu">input</span>, target)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>            reconstruction_loss <span class="op">+</span> kld_loss,</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>            reconstruction_loss.detach(),</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>            kld_loss.detach(),</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 <p>Intuitively</p>
 <blockquote class="blockquote">
 <p>I remember asking a researcher at my old job exactly why VAEs made the assumption that elements in the latent space were normally distributed and the response was “that’s just the assumption of the model. At the time it did not help.</p>
@@ -380,6 +661,7 @@ P(x) = \int P(x | z)p(z) dz.
 <h4 class="anchored" data-anchor-id="references">References</h4>
 
 
+</section>
 </section>
 </section>
 </section>
